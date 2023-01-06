@@ -1,2 +1,2 @@
 # BookSpot
-Book Finder using googkel book api.
+Book Finder using google book api.
