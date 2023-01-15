@@ -111,7 +111,9 @@ class UI {
                         
             //Get text from element
             const text = element.textContent;
-            if(text.length>charLimit){
+
+            //Checks if text length is bigger than charLimit parameter
+            if(text.length>charLimit){ //if yes
                 //Create a show more button
                 const readMoreBtn = document.createElement('a');
                 readMoreBtn.href="#";
@@ -119,42 +121,46 @@ class UI {
                 readMoreBtn.innerHTML="Read More";
 
                 //Create show less Button
-                const readLessBtn = document.createElement('a');
-                readLessBtn.href="#";
-                readLessBtn.classList.add('read-less-btn');
-                readLessBtn.innerHTML="Show Less";
+                const showLessBtn = document.createElement('a');
+                showLessBtn.href="#";
+                showLessBtn.classList.add('show-less-btn');
+                showLessBtn.innerHTML="Show Less";
 
                 //Truncate Text
                 const truncateText=text.substring(0,charLimit)+"...";
                 
+                //Replace the full text with truncuate text
                 element.textContent=truncateText;
                 
-
-
+                //Append read more button to element
                 element.appendChild(readMoreBtn);
 
                 //Add event listener to Button
                 readMoreBtn.addEventListener("click",function(e){
 
+                    //On click it will show the full text
                     element.textContent=text;
-
+                    //The Read More Button wont be displayed
                     readMoreBtn.style.display='none';
-                    
-                    element.appendChild(readLessBtn);
-
-                    readLessBtn.style.display = "inline-block";
-
+                    //Append show less button to element 
+                    element.appendChild(showLessBtn);
+                    //Show less element will be displayed
+                    showLessBtn.style.display = "inline-block";
+                    //Prevent Default behavior
                     e.preventDefault();
 
                     
                 })
-                readLessBtn.addEventListener('click',function(e){
-
+                showLessBtn.addEventListener('click',function(e){
+                    //On click, replace full text with truncated text
                     element.textContent=truncateText;
-
-                    element.appendChild(readMoreBtn)
-                    readLessBtn.style.display='none';
+                    //Append read more button to element
+                    element.appendChild(readMoreBtn);
+                    //Hide show less button
+                    showLessBtn.style.display='none';
+                    //Read more btn will be displayed
                     readMoreBtn.style.display='inline-block'
+                    //Prevent default behavior
                     e.preventDefault();
                 })
 
