@@ -23,18 +23,18 @@ class UI {
                         ${item.volumeInfo.language}
                         </span>
                         <span class="badge badge-success">Categories : 
-                        ${item.volumeInfo.categories}
+                        ${item.volumeInfo.categories === undefined ? "-" : item.volumeInfo.categories}
                         </span>
                         <span class="badge badge-warning">Pages : 
-                        ${item.volumeInfo.pageCount}
+                        ${item.volumeInfo.pageCount === undefined ? "-" : item.volumeInfo.pageCount}
                         </span>
                         <br><br>
                         <ul class="list-group">
-                        <li class="list-group-item">${item.volumeInfo.description}</li>
-                        <li class="list-group-item"><span style="font-weight:bold">Authors :</span> ${item.volumeInfo.authors}</li>
-                        <li class="list-group-item"><span style="font-weight:bold">Published by :</span> ${item.volumeInfo.publisher} on ${item.volumeInfo.publishedDate}</li>
+                        <li class="list-group-item" id="description">${item.volumeInfo.description === undefined ? 'No Description.': item.volumeInfo.description}</li>
+                        <li class="list-group-item"><span style="font-weight:bold">Authors :</span> ${item.volumeInfo.authors === undefined ? "Author unavailable" : item.volumeInfo.authors}</li>
+                        <li class="list-group-item"><span style="font-weight:bold">Published by :</span> ${item.volumeInfo.publisher === undefined ? "No publisher info." : item.volumeInfo.publisher} ${item.volumeInfo.publishedDate === undefined ? "No Published Date." :  `Published on ${item.volumeInfo.publishedDate}.`}</li>
                         <li class="list-group-item"><span style="font-weight:bold">ISBN :</span> ${item.volumeInfo.industryIdentifiers[0].identifier}</li>
-                        <li class="list-group-item"><span style="font-weight:bold">Rating :</span> ${this.getStars(item.volumeInfo.averageRating)} (${item.volumeInfo.ratingsCount})</li>
+                        <li class="list-group-item"><span style="font-weight:bold">Rating :</span> ${this.getStars(item.volumeInfo.averageRating)} (${item.volumeInfo.ratingsCount === undefined ? "-" : item.volumeInfo.ratingsCount })</li>
                         
                         
 
@@ -101,4 +101,66 @@ class UI {
     clearSearchResult(){
         this.book.innerHTML='';
     }
+    addReadMoreButton(charLimit) {
+        //Get all the description elements
+        const descriptionElements = document.querySelectorAll('#description');
+
+
+        //Iterate throught every element
+        descriptionElements.forEach((element) => {
+                        
+            //Get text from element
+            const text = element.textContent;
+            if(text.length>charLimit){
+                //Create a show more button
+                const readMoreBtn = document.createElement('a');
+                readMoreBtn.href="#";
+                readMoreBtn.classList.add('read-more-btn');
+                readMoreBtn.innerHTML="Read More";
+
+                //Create show less Button
+                const readLessBtn = document.createElement('a');
+                readLessBtn.href="#";
+                readLessBtn.classList.add('read-less-btn');
+                readLessBtn.innerHTML="Show Less";
+
+                //Truncate Text
+                const truncateText=text.substring(0,charLimit)+"...";
+                
+                element.textContent=truncateText;
+                
+
+
+                element.appendChild(readMoreBtn);
+
+                //Add event listener to Button
+                readMoreBtn.addEventListener("click",function(e){
+
+                    element.textContent=text;
+
+                    readMoreBtn.style.display='none';
+                    
+                    element.appendChild(readLessBtn);
+
+                    readLessBtn.style.display = "inline-block";
+
+                    e.preventDefault();
+
+                    
+                })
+                readLessBtn.addEventListener('click',function(e){
+
+                    element.textContent=truncateText;
+
+                    element.appendChild(readMoreBtn)
+                    readLessBtn.style.display='none';
+                    readMoreBtn.style.display='inline-block'
+                    e.preventDefault();
+                })
+
+
+            }
+        })
+      }
+      
 }
